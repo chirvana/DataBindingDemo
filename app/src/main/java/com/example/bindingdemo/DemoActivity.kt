@@ -4,20 +4,24 @@ import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
-import kotlinx.android.synthetic.main.activity_demo.*
+import com.example.bindingdemo.databinding.ActivityDemoBinding
 
 class DemoActivity : AppCompatActivity() {
 
+    private lateinit var binding: ActivityDemoBinding
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_demo)
+
+        binding = ActivityDemoBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
         when (intent.getSerializableExtra(MainActivity.INTENT_KEY) as ScreenType) {
             ScreenType.ACTIVITY_DEMO -> {
-                fragment_demo_container.visibility = View.GONE
+                binding.fragmentDemoContainer.visibility = View.GONE
 
-                button.setOnClickListener {
-                    text_view.text = items.random()
+                binding.button.setOnClickListener {
+                    binding.textView.text = items.random()
                 }
             }
             else -> transact()
@@ -25,8 +29,11 @@ class DemoActivity : AppCompatActivity() {
     }
 
     private fun transact() {
-        button.visibility = View.GONE
-        text_view.visibility = View.GONE
+        with(binding) {
+            button.visibility = View.GONE
+            textView.visibility = View.GONE
+        }
+
 
         val fragment: Fragment =
             when (intent.getSerializableExtra(MainActivity.INTENT_KEY) as ScreenType) {
