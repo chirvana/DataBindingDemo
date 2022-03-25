@@ -7,9 +7,16 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.widget.doAfterTextChanged
-import kotlinx.android.synthetic.main.demo_fragment.*
+import com.example.bindingdemo.databinding.DemoFragmentBinding
 
 class DemoFragment : Fragment() {
+
+    private var _binding: DemoFragmentBinding? = null
+    // This property is only valid between onCreateView and onDestroyView.
+    // Fragments outlive their views. Make sure you clean up any references to the binding
+    // class instance in the fragment's onDestroyView() method.
+    private val binding
+        get() = _binding!!
 
     companion object {
         fun newInstance() = DemoFragment()
@@ -21,16 +28,21 @@ class DemoFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.demo_fragment, container, false)
+        _binding = DemoFragmentBinding.inflate(inflater, container, false)
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         viewModel = ViewModelProvider(this).get(DemoViewModel::class.java)
 
-        edit_text.doAfterTextChanged {
-            text_view_2.text = it.toString()
+        binding.editText.doAfterTextChanged {
+            binding.textView2.text = it.toString()
         }
     }
 
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
 }
