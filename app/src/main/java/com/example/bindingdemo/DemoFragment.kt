@@ -1,12 +1,11 @@
 package com.example.bindingdemo
 
-import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.widget.doAfterTextChanged
+import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
 import com.example.bindingdemo.databinding.DemoFragmentBinding
 
 class DemoFragment : Fragment() {
@@ -34,10 +33,14 @@ class DemoFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewModel = ViewModelProvider(this).get(DemoViewModel::class.java)
 
-        binding.editText.doAfterTextChanged {
-            binding.textView2.text = it.toString()
+        viewModel = ViewModelProvider(this)[DemoViewModel::class.java]
+
+        binding.viewModel = this.viewModel
+        binding.lifecycleOwner = viewLifecycleOwner
+
+        viewModel.close.observe(viewLifecycleOwner) {
+            activity?.finish()
         }
     }
 
