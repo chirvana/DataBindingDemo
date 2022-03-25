@@ -1,0 +1,2 @@
+- main branch doesn't have binding
+- Use branch with_binding to see how to apply binding to activity, fragment, custom view and recyclerview
